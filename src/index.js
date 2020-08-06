@@ -1,26 +1,12 @@
-import { cube } from './math'
+// 动态导入
 
-if(process.env.NODE_ENV !== 'production') {
-  console.log('Looks like we are in development mode!');
-}
-
-function component() {
-  var element = document.createElement('pre');
-  var btn = document.createElement('button');
-
-  element.innerHTML = [
-    'Hello webpack',
-    '5 cubes is equal to ' + cube(5)
-  ].join('\n\n');
-
+async function getComponent() {
+  var element = document.createElement('div');
+  const _ = await import(/* webpackChunkName: "lodash" */ 'lodash');
+  element.innerHTML = _.join(['Hello', 'webpack'], ' ')
   return element;
 }
 
-document.body.appendChild(component());
-
-// if(module.hot) {
-//   module.hot.accept('./print.js', function() {
-//     console.log('Accepting the updated printMe module!');
-//     printMe();
-//   });
-// }
+getComponent().then(component => {
+  document.body.appendChild(component);
+})
